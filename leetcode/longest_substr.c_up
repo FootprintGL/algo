@@ -1,0 +1,75 @@
+#include<stdio.h>
+#include<string.h>
+
+int findTheLongestSubstring(char * s){
+    int len = strlen(s);
+    /* statistics */
+    int idx[5] = {len, len, len, len, len};
+    /* flag for even {'a', 'e', 'i', 'o', 'u'} */
+    int even[5] = {1, 1, 1, 1, 1};
+    int i, min = len;
+
+    printf("len %d\n", len);
+    /*  */
+    for (i = 0; i < len; i++) {
+        if (s[i] == 'a') {
+            even[0] = !even[0];
+	    if (!even[0]) {
+		if (even[1] && even[2] && even[3] && even[4]) {
+			min = i;
+			printf("a %d\n", i);
+		}
+	    } else
+		min = i;
+        } else if (s[i] == 'e'){
+            even[1] = !even[1];
+	    if (!even[1]) {
+		if (even[0] && even[2] && even[3] && even[4]) {
+			min = i;
+			printf("e %d\n", i);
+		}
+	    } else
+		min = i;
+        } else if (s[i] == 'i') {
+            even[2] = !even[2];
+	    if (!even[2]) {
+		if (even[0] && even[1] && even[3] && even[4]) {
+			min = i;
+			printf("i %d\n", i);
+		}
+	    } else
+		min = i;
+        } else if (s[i] == 'o') {
+            even[3] = !even[3];
+	    if (!even[3]) {
+		if (even[0] && even[1] && even[2] && even[4]) {
+			min = i;
+			printf("o %d\n", i);
+		}
+	    } else
+		min = i;
+        } else if (s[i] == 'u') {
+            even[4] = !even[4];
+	    if (!even[4]) {
+		if (even[0] && even[1] && even[1] && even[3]) {
+			min = i;
+			printf("u %d\n", i);
+		}
+	    } else
+		min = i;
+        }
+
+	printf("even %d %d %d %d %d\n", even[0], even[1], even[2], even[3], even[4]);
+    }
+
+    return min;
+}
+
+int main()
+{
+    char *s = "eleetminicoworoep";
+    //char *s = "leetcodeisgreat";
+    int len = findTheLongestSubstring(s);
+    printf("len %d\n", len);
+    return 0;
+}
