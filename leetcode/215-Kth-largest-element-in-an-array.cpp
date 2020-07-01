@@ -1,3 +1,148 @@
+
+class Solution {
+public:
+    /* 交换数组中下标i和j的元素 */
+    void swap(vector<int> &nums, int i, int j) {
+        int t = nums[i];
+        nums[i] = nums[j];
+        nums[j] = t;
+    }
+
+    /* 调整最大堆 - 递归  */
+    void adjustheap(vector<int> &nums, int j, int len) {
+        if (2 * j + 1 < len) {
+            if (2 * j + 2 < len) {
+                /* 左右儿子都有 */
+                if (nums[2 * j + 1] > nums[2 * j + 2]) {
+                    /* 左儿子较大 */
+                    if (nums[j] < nums[2 * j + 1]) {
+                        swap(nums, j, 2 * j + 1);
+                        /* 继续调整右子树 */
+                        adjustheap(nums, 2 * j + 1, len);
+                    } else {
+                        return;
+                    }
+                } else {
+                    /* 右儿子较大 */
+                    if (nums[j] < nums[2 * j + 2]) {
+                        swap(nums, j, 2 * j + 2);
+                        /* 继续调整右子树 */
+                        adjustheap(nums, 2 * j + 2, len);
+                    } else {
+                        return;
+                    }
+                }
+            } else {
+                /* 只有左儿子 */
+                if (nums[j] < nums[2 * j + 1]) {
+                    swap(nums, j, 2 * j + 1);
+                }
+                return;
+            }
+        }
+    }
+
+    /* 构建调整最大堆 */
+    void createheap(vector<int> &nums, int len) {
+        int i;
+
+        for (i = len / 2 - 1; i >= 0; i--) {
+            adjustheap(nums, i, len);
+        }
+    }
+
+    int findKthLargest(vector<int>& nums, int k) {
+        int n = nums.size();
+        int i;
+
+        /*
+         * 堆排序
+         * 每次构建堆可以排好一个元素，调整k次可得到第k个最大元素
+         */
+        for (i = 0; i < k; i++) {
+            createheap(nums, n - i);
+            swap(nums, 0, n - i - 1);
+        }
+/*
+     for (i = 0; i < n; i++) {
+            cout << nums[i] << " ";
+        }
+        cout << endl;
+*/
+        return nums[n - k];
+    }
+};
+
+class Solution {
+public:
+    /* 交换数组中下标i和j的元素 */
+    void swap(vector<int> &nums, int i, int j) {
+        int t = nums[i];
+        nums[i] = nums[j];
+        nums[j] = t;
+    }
+
+    /* 构建调整最大堆 - 迭代 */
+    void adjustheap(vector<int> &nums, int len) {
+        int i, j;
+
+        for (i = len / 2 - 1; i >= 0; i--) {
+            j = i;
+            while (2 * j + 1 < len) {
+                if (2 * j + 2 < len) {
+                    /* 左右儿子都有 */
+                    if (nums[2 * j + 1] > nums[2 * j + 2]) {
+                        /* 左儿子较大 */
+                        if (nums[j] < nums[2 * j + 1]) {
+                            swap(nums, j, 2 * j + 1);
+                            /* 继续调整右子树 */
+                            j = 2 * j +  1;
+                        } else {
+                            break;
+                        }
+                    } else {
+                        /* 右儿子较大 */
+                        if (nums[j] < nums[2 * j + 2]) {
+                            swap(nums, j, 2 * j + 2);
+                            /* 继续调整右子树 */
+                            j = 2 * j + 2;
+                        } else {
+                            break;
+                        }
+                    }
+                } else {
+                    /* 只有左儿子 */
+                    if (nums[j] < nums[2 * j + 1]) {
+                        swap(nums, j, 2 * j + 1);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    int findKthLargest(vector<int>& nums, int k) {
+        int n = nums.size();
+        int i;
+
+        /*
+         * 堆排序
+         * 每次构建堆可以排好一个元素，调整k次可得到第k个最大元素
+         */
+        for (i = 0; i < k; i++) {
+            adjustheap(nums, n - i);
+            swap(nums, 0, n - i - 1);
+        }
+/*
+     for (i = 0; i < n; i++) {
+            cout << nums[i] << " ";
+        }
+        cout << endl;
+*/
+        return nums[n - k];
+    }
+};
+
 class Solution {
 public:
     /* 交换数组中下标i和j的元素 */
