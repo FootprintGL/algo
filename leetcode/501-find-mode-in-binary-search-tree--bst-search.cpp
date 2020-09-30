@@ -1,5 +1,64 @@
 
 
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> res;
+    int prev;
+    int count;
+    int maxcnt;
+
+    /* 中序遍历 */
+    void inorder(TreeNode *root) {
+        //cout << root << " " << prev << " " << count << " " << maxcnt << " " << res.size() << endl;
+        if (root == NULL)
+            return;
+
+        inorder(root->left);
+        if (count == 0) {
+            prev = root->val;
+            count = 1;
+        } else {
+            if (root->val == prev) {
+                count++;
+            } else {
+                prev = root->val;
+                count = 1;
+            }
+        }
+        if (count == maxcnt) {
+            res.push_back(prev);
+        } else if (count > maxcnt) {
+            res.clear();
+            res.push_back(prev);
+            maxcnt = count;
+        }
+        inorder(root->right);
+    }
+
+    vector<int> findMode(TreeNode* root) {
+        maxcnt = 0;
+        prev = INT_MIN;
+        count = 0;
+
+        inorder(root);
+
+        return res;
+    }
+};
+
+
+
+
+
     /**
     * Definition for a binary tree node.
     * struct TreeNode {
@@ -48,3 +107,62 @@
             return res;
         }
     };
+
+
+
+
+/* 错误解法 - 只在不相等时更新是不对的，最后一组数据没有统计 */
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> res;
+    int prev;
+    int count;
+    int maxcnt;
+
+    /* 中序遍历 */
+    void inorder(TreeNode *root) {
+        cout << root << " " << prev << " " << count << " " << maxcnt << " " << res.size() << endl;
+        if (root == NULL)
+            return;
+
+        inorder(root->left);
+        if (count == 0) {
+            prev = root->val;
+            count = 1;
+        } else {
+            if (root->val == prev) {
+                count++;
+            } else {
+                if (count == maxcnt) {
+                    res.push_back(prev);
+                } else if (count > maxcnt) {
+                    res.clear();
+                    res.push_back(prev);
+                    maxcnt = count;
+                    prev = root->val;
+                    count = 1;
+                }
+            }
+        }
+        inorder(root->right);
+    }
+
+    vector<int> findMode(TreeNode* root) {
+        maxcnt = 0;
+        prev = INT_MIN;
+        count = 0;
+
+        inorder(root);
+
+        return res;
+    }
+};
