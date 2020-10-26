@@ -1,3 +1,26 @@
+class Solution {
+public:
+    string convert(string & s) {
+        string stk;
+
+        for (auto &c : s) {
+            if (c == '#') {
+                if (!stk.empty())
+                    stk.pop_back();
+            } else {
+                stk.push_back(c);
+            }
+        }
+
+        return stk;
+    }
+
+    bool backspaceCompare(string S, string T) {
+        /* 堆栈 */
+        return (convert(S) == convert(T));
+    }
+};
+
 
 class Solution {
 public:

@@ -1,5 +1,92 @@
 
 
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        /* 二分查找 - 中间节点吧数组分成2部分，一部分有序，另一部分可能有序也可能无序 */
+        int n = nums.size();
+
+        if (n == 1)
+            return target == nums[0] ? 0 : -1;
+
+        int l = 0, r = n - 1, m;
+
+        while (l <= r) {
+            m = l + (r - l) / 2;
+
+            if (nums[m] == target)
+            /* 找到target */
+                return m;
+
+            if (nums[l] <= nums[m]) {
+                /* 左边有序 */
+                if (target >= nums[l] && target < nums[m]) {
+                    /* 在左边 */
+                    r = m - 1;
+                } else {
+                    /* 在右边 */
+                    l = m + 1;
+                }
+            } else {
+                /* 右边有序 */
+                if (target > nums[m] && target <= nums[r]) {
+                    /* 在右边 */
+                    l = m + 1;
+                } else {
+                    /* 在左边 */
+                    r = m - 1;
+                }
+            }
+        }
+
+        return -1;
+    }
+};
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        /* 二分查找 - 中间节点吧数组分成2部分，一部分有序，另一部分可能有序也可能无序 */
+        int n = nums.size();
+
+        if (n == 1)
+            return target == nums[0] ? 0 : -1;
+
+        int l = 0, r = n - 1, m;
+
+        while (l <= r) {
+            m = l + (r - l) / 2;
+
+            if (nums[m] == target)
+            /* 找到target */
+                return m;
+
+            if (nums[0] <= nums[m]) {
+                /* 左边有序 */
+                if (target >= nums[0] && target < nums[m]) {
+                    /* 在左边 */
+                    r = m - 1;
+                } else {
+                    /* 在右边 */
+                    l = m + 1;
+                }
+            } else {
+                /* 右边有序 */
+                if (target > nums[m] && target <= nums[n - 1]) {
+                    /* 在右边 */
+                    l = m + 1;
+                } else {
+                    /* 在左边 */
+                    r = m - 1;
+                }
+            }
+        }
+
+        return -1;
+    }
+};
+
 class Solution {
 public:
     /* 二分法 - 已排序数组中查找target */
