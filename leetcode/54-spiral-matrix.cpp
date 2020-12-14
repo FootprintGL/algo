@@ -2,77 +2,46 @@
 class Solution {
 public:
     vector<int> spiralOrder(vector<vector<int>>& matrix) {
-        int top, bottom, left, right;
-        int i = 0, j = 0, k = 0;
+        int m = matrix.size();
+        int n = matrix[0].size();
+        vector<int> res;
+        int i, j;
 
-        /* 特殊情况处理 */
-        if (matrix.size() == 0) {
-            /* 空矩阵 */
-            vector<int> res;
-            return res;
-        } else if (matrix.size() == 1){
-            /* 只有一行 */
-            vector<int> res (matrix[0].begin(), matrix[0].end());
-            return res;
-        } else if (matrix[0].size() == 1) {
-            /* 只有一列 */
-            vector<int> res (matrix.size(), 0);
-            for (i = 0; i < matrix.size(); i++) {
-                res[k++] = matrix[i][0];
-            }
-            return res;
-        } else {
-            top = 0;
-            bottom = matrix.size();
-            left = 0;
-            right = matrix[0].size();
-        }
+        /* 由外到内按层遍历 */
+        int top = 0;
+        int left = 0;
+        int bottom = m - 1;
+        int right = n - 1;
+        
+        while (top <= bottom && left <= right) {
+            /* (top, left) -> (top, right) */
+            for (j = left; j <= right; j++)
+                res.push_back(matrix[top][j]);
 
-        /* 螺旋遍历矩阵 */
-        k = 0;
-        vector<int> res (bottom * right, 0);
-        //cout << top << " " << bottom << " " << left << " " << right << " " << endl;
-
-        while (top < bottom && left < right) {
-            /* 从左向右遍历最上面一行*/
-            for (j = left; j < right; j++) {
-                res[k++] = matrix[top][j];
-                //cout << res[k-1] << " ";
-            }
-            /* 更新top，判断终止条件 */
-            if (++top == bottom)
+            if (top + 1 > bottom)
                 break;
-            //cout << endl << "index:" << top << " " << bottom << " " << left << " " << right << endl;
 
-            /* 从上到下遍历最右边一行 */
-            for (j = top; j < bottom; j++) {
-                res[k++] = matrix[j][right - 1];
-                //cout << res[k-1] << " ";
-            }
-            /* 更新right，判断终止条件 */
-            if (--right == left)
-                break;
-            //cout << endl << "index:" << top << " " << bottom << " " << left << " " << right << endl;
+            /* (top + 1, right) -> (bottom, right) */
+            for (i = top + 1; i <= bottom; i++)
+                res.push_back(matrix[i][right]);
 
-            /* 从右向左遍历最下面一行 */
-            for (i = right - 1; i >= left; i--) {
-                res[k++] = matrix[bottom - 1][i];
-                //cout << res[k-1] << " ";
-            }
-            /* 更新bottom，判断终止条件 */
-            if (--bottom == top)
+            if (right - 1 < left)
                 break;
-            //cout << endl << "index:" << top << " " << bottom << " " << left << " " << right << endl;
 
-            /* 从下到上遍历最左边一行 */
-            for (j = bottom - 1; j >= top; j--) {
-                res[k++] = matrix[j][left];
-                //cout << res[k-1] << " ";
-            }
-            /* 更新left，判断终止条件 */
-            if (++left == right)
+            /* (bottom, right - 1) -> (bottom, left) */
+            for (j = right - 1; j >= left; j--)
+                res.push_back(matrix[bottom][j]);
+
+            if (bottom - 1 < left + 1)
                 break;
-            //cout << endl << "index:" << top << " " << bottom << " " << left << " " << right << endl;
+
+            /* (bottom - 1, left) -> (top + 1, left) */
+            for (i = bottom - 1; i >= left + 1; i--)
+                res.push_back(matrix[i][left]);
+            top++;
+            left++;
+            right--;
+            bottom--;
         }
 
         return res;
@@ -84,65 +53,45 @@ public:
 class Solution {
 public:
     vector<int> spiralOrder(vector<vector<int>>& matrix) {
-        int top, bottom, left, right;
-        int i = 0, j = 0, k = 0;
+        int m = matrix.size();
+        int n = matrix[0].size();
+        int row, col;
+        vector<int> res;
+        int i, j, l;
 
-        if (matrix.size() == 0) {
-            /* 空矩阵处理 */
-            vector<int> res;
-            return res;
-        } else {
-            top = 0;
-            bottom = matrix.size();
-            left = 0;
-            right = matrix[0].size();
-        }
-
-        /* 螺旋遍历矩阵 */
-        k = 0;
-        vector<int> res (bottom * right, 0);
-        //cout << top << " " << bottom << " " << left << " " << right << " " << endl;
-
-        while (top < bottom && left < right) {
-            /* 从左向右遍历最上面一行*/
-            for (j = left; j < right; j++) {
-                res[k++] = matrix[top][j];
-                //cout << res[k-1] << " ";
-            }
-            /* 更新top，判断终止条件 */
-            if (++top == bottom)
+        /* l记录圈数，从外圈向内圈依次处理，l行，n - l - 1行, m - l - 1行, l列 */
+        for (l = 0; l < (m + 1) / 2; l++) {
+            if (l > n - l - 1)
                 break;
-            //cout << endl << "index:" << top << " " << bottom << " " << left << " " << right << endl;
 
-            /* 从上到下遍历最右边一行 */
-            for (j = top; j < bottom; j++) {
-                res[k++] = matrix[j][right - 1];
-                //cout << res[k-1] << " ";
-            }
-            /* 更新right，判断终止条件 */
-            if (--right == left)
-                break;
-            //cout << endl << "index:" << top << " " << bottom << " " << left << " " << right << endl;
+            /* i行 */
+            row = l;
+            for (j = l; j <= n - l - 1; j++)
+                res.push_back(matrix[row][j]);
 
-            /* 从右向左遍历最下面一行 */
-            for (i = right - 1; i >= left; i--) {
-                res[k++] = matrix[bottom - 1][i];
-                //cout << res[k-1] << " ";
-            }
-            /* 更新bottom，判断终止条件 */
-            if (--bottom == top)
+            if (row + 1 > m - l - 1)
                 break;
-            //cout << endl << "index:" << top << " " << bottom << " " << left << " " << right << endl;
 
-            /* 从下到上遍历最左边一行 */
-            for (j = bottom - 1; j >= top; j--) {
-                res[k++] = matrix[j][left];
-                //cout << res[k-1] << " ";
-            }
-            /* 更新left，判断终止条件 */
-            if (++left == right)
+            /* n - i - 1列 */
+            col = n - l - 1;
+            for (i = row + 1; i <= m - l - 1; i++)
+                res.push_back(matrix[i][col]);
+
+            if (col - 1 < l)
                 break;
-            //cout << endl << "index:" << top << " " << bottom << " " << left << " " << right << endl;
+
+            /* m - l - 1行 */
+            row = m - l - 1;
+            for (j = col - 1; j >= l; j--)
+                res.push_back(matrix[row][j]);
+
+            if (row - 1 < l + 1)
+                break;
+
+            /* l列 */
+            col = l;
+            for (i = row - 1; i >= l + 1; i--)
+                res.push_back(matrix[i][col]);
         }
 
         return res;

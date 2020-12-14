@@ -1,4 +1,31 @@
 
+
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        /* 二分搜索 */
+        int size = nums.size();
+        if (size == 0)
+            return 0;
+        
+        if (target > nums[size - 1])
+            return size;
+
+        int left = 0, right = nums.size() - 1;
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target)
+                /* 搜索结果为第一个大于等于target的位置坐标 */
+                left = mid + 1;
+            else
+                right = mid;
+        }
+
+        return left;
+    }
+};
+
 class Solution {
 public:
     /* 二分法 */

@@ -1,3 +1,39 @@
+
+class Solution {
+public:
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        /*
+         * 单调栈
+         * 将nums2中元素求出下一个更大的元素，并放入哈希表，再遍历nums1直接找出答案
+         */
+        vector<int> res(nums1.size(), -1);
+        stack<int> st;
+        unordered_map<int, int> tbl;
+
+        for (auto &num : nums2) {
+            while (!st.empty() && st.top() < num) {
+                /* 弹出比num小的数 */
+                tbl[st.top()] = num;
+                st.pop();
+            }
+            st.push(num);
+        }
+
+        while (!st.empty()) {
+            /* 栈里剩下的数后面没有更大的数 */
+            tbl[st.top()] = -1;
+            st.pop();
+        }
+
+        for (int i = 0; i < nums1.size(); i++) {
+            res[i] = tbl[nums1[i]];
+        }
+
+        return res;
+    }
+};
+
+
 class Solution {
 public:
     vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
