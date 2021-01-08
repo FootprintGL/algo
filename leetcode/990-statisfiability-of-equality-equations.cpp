@@ -1,3 +1,50 @@
+
+/* 并查集 */
+class DSU {
+    vector<int> parent;
+
+public:
+    DSU(int n) {
+        for (int i = 0; i < n; i++) {
+            parent.push_back(i);
+        }
+    }
+
+    int find(int x) {
+        return x == parent[x] ? x : find(parent[x]);
+    }
+
+    void merge(int x, int y) {
+        int rx = find(x);
+        int ry = find(y);
+        if (rx != ry)
+            parent[rx] = ry;
+    }
+};
+
+class Solution {
+public:
+    bool equationsPossible(vector<string>& equations) {
+        DSU dsu(26);
+
+        /* 并查集 */
+        for (auto &str : equations) {
+            if (str[1] == '=')
+            /* 等式具有传递性 - 合并 */
+                dsu.merge(str[0] - 'a', str[3] - 'a');
+        }
+        
+        for (auto &str : equations) {
+            if (str[1] == '!' && dsu.find(str[0] - 'a') == dsu.find(str[3] - 'a'))
+            /* 不等式两端属于相同集合 */
+                return false;
+        }
+
+        return true;
+    }
+};
+
+
 /* https://www.jianshu.com/p/b37ba1f7d45c */
 /* https://segmentfault.com/a/1190000004023326 */
 
